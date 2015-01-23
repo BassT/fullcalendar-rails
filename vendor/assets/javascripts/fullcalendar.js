@@ -4026,10 +4026,12 @@ function compareNormalRanges(range1, range2) {
 
 // A cmp function for determining which segments should take visual priority
 // DOES NOT WORK ON INVERTED BACKGROUND EVENTS because they have no eventStartMS/eventDurationMS
+// SR: DO NOT TOUCH! HIGHLY CUSTOMIZED FOR PS EVENT RENDERING!
 function compareSegs(seg1, seg2) {
-	return seg1.eventStartMS - seg2.eventStartMS || // earlier events go first
+	return moment(seg1.eventStartMS).hour() - moment(seg2.eventStartMS).hour() || // earlier events go first - only HOUR
 		/*seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first*/
 		compareShiftEvent(seg1, seg2) || // tie? shift goes first
+		seg1.eventStartMS - seg2.eventStartMS || // tie? earlier events go first (weekday)
 		seg1.eventDurationMS - seg2.eventDurationMS || // tie? shorter events go first
 		seg2.event.allDay - seg1.event.allDay || // tie? put all-day events first (booleans cast to 0/1)
 		(seg1.event.title || '').localeCompare(seg2.event.title); // tie? alphabetically by title
@@ -4835,6 +4837,9 @@ DayGrid.mixin({
 		segs.sort(compareSegs);
 		console.log("segs after sort");
 		console.log(segs);
+		for(i = 0; i < segs.length; i++) {
+			console.log(segs[i].event.start + " (shift_id " + segs[i].event.shift_id + ")");
+		}
 
 		for (i = 0; i < segs.length; i++) {
 			seg = segs[i];
