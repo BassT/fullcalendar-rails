@@ -4783,7 +4783,7 @@ DayGrid.mixin({
 					// set height of every fc-day-grid-event to maxHeight
 					if (seg.el.height() > maxHeight) {
 						maxHeight = seg.el.height();
-						tbody.('td a.fc-day-grid-event').height(maxHeight);
+						tbody.$('td a.fc-day-grid-event').height(maxHeight);
 					}
 
 					if (seg.leftCol != seg.rightCol) {
