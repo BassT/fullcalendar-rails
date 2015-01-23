@@ -4849,21 +4849,29 @@ DayGrid.mixin({
 			workingArea = seg.event.title;
 
 			// loop through levels, starting with the topmost, until the segment doesn't collide with other segments
+			var level;
 			for (k = 0; k < levelsByWorkingArea[workingArea].length; k++) {
-				if (!isDaySegCollision(seg, levelsByWorkingArea[workingArea][k])) {
+				level = levelsByWorkingArea[workingArea][k];
+				if (typeof level !== "undefined" && level !== null) { // level exists
+					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
+						if (!(seg.event.shift_id !== 0) || !(level[0].event.shift_id === 0)) {  // not adding a shift or current level doesn't contain a shift
+							if (!isDaySegCollision(seg, level)) {
+								break;
+							}
+						}
+					} else {
+						if (!isDaySegCollision(seg, level)) {
+							break;
+						}
+					}
+				} else {
 					break;
 				}
 			}
 
 			// if we're adding a shift and there's already a single event, skip one level
-			var level = levelsByWorkingArea[workingArea][k];
-			if (typeof level !== "undefined" && level !== null) {
-				if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) {
-					if (seg.event.shift_id !== 0 && level[0].event.shift_id === 0) {
-						k++;
-					}
-				}
-			}
+
+
 
 			// `k` now holds the desired subrow index
 			seg.levelByWorkingArea = k;
