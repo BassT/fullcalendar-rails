@@ -4854,6 +4854,15 @@ DayGrid.mixin({
 					break;
 				}
 			}
+
+			// if we're adding a shift and there's already a single event, skip one level
+			var level = levelsByWorkingArea[workingArea][k];
+			if (seg.event.shift_id !== null && typeof seg.event.shift_id !== "undefined") {
+				if (seg.event.shift_id !== 0 && level[0].event.shift_id === 0){
+					k++;
+				}
+			}
+
 			// `k` now holds the desired subrow index
 			seg.levelByWorkingArea = k;
 
