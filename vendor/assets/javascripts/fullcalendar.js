@@ -4896,7 +4896,7 @@ DayGrid.mixin({
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
 			// add padding to each element of last level of each working area
-			var lastLevelOfWorkingArea = levelsByWorkingArea[workingArea][levelsByWorkingArea[workingArea].length - 1];
+			var lastLevelOfWorkingArea = levelsByWorkingArea[workingAreas[i]][levelsByWorkingArea[workingAreas[i]].length - 1];
 			for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
 				lastLevelOfWorkingArea[k].paddingBottom = "45px";
 			}
