@@ -4895,7 +4895,7 @@ DayGrid.mixin({
 			if (i < workingAreas.length - 1) {
 				var lastLevelOfWorkingArea = levelsByWorkingArea[workingArea][levelsByWorkingArea[workingArea].length - 1];
 				for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
-					lastLevelOfWorkingArea[k].event.el.css("padding-bottom", "45px");
+					lastLevelOfWorkingArea[k].el.css("padding-bottom", "45px");
 				}
 			}
 			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
