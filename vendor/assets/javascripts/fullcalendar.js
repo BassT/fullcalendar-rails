@@ -4854,12 +4854,22 @@ DayGrid.mixin({
 				level = levelsByWorkingArea[workingArea][k];
 				if (typeof level !== "undefined" && level !== null) { // level exists
 					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
-						if (!(seg.event.shift_id !== 0) || !(level[0].event.shift_id === 0)) {  // not adding a shift or current level doesn't contain a shift
-							if (!isDaySegCollision(seg, level)) {
-								break;
+						if (!(seg.event.shift_id !== 0) || !(level[0].event.shift_id === 0)) { // not adding a shift or current level doesn't contain a shift
+							if (!isDaySegCollision(seg, level)) { // slot is still free
+								// if single event, only add if there's NO later shift which starts before this single event
+								var nextLevel = levelsByWorkingArea[workingArea][k+1];
+								if (seg.event.shift_id === 0) { // single event
+									if (!(typeof nextLevel === "undefined" && nextLevel !== null)) { // there's a later shift
+										if (moment(nextLevel[0].event.start).after(moment(seg.event.start))) { // shift starts after the single event --> that's okay, add the single event
+											break;
+										}
+									}
+								} else {
+									break;
+								}
 							}
 						}
-					} else {
+					} else { // no shift_ids loaded yet, just dump the events old style
 						if (!isDaySegCollision(seg, level)) {
 							break;
 						}
@@ -4868,10 +4878,6 @@ DayGrid.mixin({
 					break;
 				}
 			}
-
-			// if we're adding a shift and there's already a single event, skip one level
-
-
 
 			// `k` now holds the desired subrow index
 			seg.levelByWorkingArea = k;
