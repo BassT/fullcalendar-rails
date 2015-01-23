@@ -4892,7 +4892,7 @@ DayGrid.mixin({
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
 			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
-			if (i < workingAreas.lenght - 1) {
+			if (i < workingAreas.length - 1) {
 				levels.push([{el: renderTransparentEventEl(), leftCol: 0, rightCol: 0}]);
 			}
 		}
