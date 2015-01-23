@@ -4737,6 +4737,7 @@ DayGrid.mixin({
 		var tr;
 		var j, seg;
 		var td;
+		var maxHeight = 0;
 
 		// populates empty cells from the current column (`col`) to `endCol`
 		function emptyCellsUntil(endCol) {
@@ -4778,6 +4779,13 @@ DayGrid.mixin({
 
 					// create a container that occupies or more columns. append the event element.
 					td = $('<td class="fc-event-container"/>').append(seg.el);
+
+					// set height of every fc-day-grid-event to maxHeight
+					if (seg.el.height() > maxHeight) {
+						maxHeight = seg.el.height();
+						tbody.('td a.fc-day-grid-event').height(maxHeight);
+					}
+
 					if (seg.leftCol != seg.rightCol) {
 						td.attr('colspan', seg.rightCol - seg.leftCol + 1);
 					}
