@@ -4908,12 +4908,12 @@ DayGrid.mixin({
 		console.log(segs);
 
 		// order segments left-to-right. very important if calendar is RTL
-		for (j = 0; j < levels.length; j++) {
-			levels[j].sort(compareDaySegCols);
-		}
+		//for (j = 0; j < levels.length; j++) {
+		//	levels[j].sort(compareDaySegCols);
+		//}
 
-		console.log("ordered segments left-to-right");
-		console.log(segs);
+		//console.log("ordered segments left-to-right");
+		//console.log(segs);
 
 		return levels;
 	},
