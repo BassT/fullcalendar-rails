@@ -4834,6 +4834,9 @@ DayGrid.mixin({
 		// a chance to be closer to the top.
 		console.log("segs before sort");
 		console.log(segs);
+		for(i = 0; i < segs.length; i++) {
+			console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
+		}
 		segs.sort(compareSegs);
 		console.log("segs after sort");
 		console.log(segs);
