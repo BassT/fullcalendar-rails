@@ -4835,6 +4835,9 @@ DayGrid.mixin({
 		segs.sort(compareSegs);
 		console.log("segs after sort");
 		console.log(segs);
+		for(i = 0; i < segs.length; i++) {
+			console.log(segs[i].event.start + " (shift " + segs[i].event.shift_id + ")");
+		}
 
 		for (i = 0; i < segs.length; i++) {
 			seg = segs[i];
