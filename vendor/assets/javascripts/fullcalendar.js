@@ -4028,32 +4028,9 @@ function compareNormalRanges(range1, range2) {
 // DOES NOT WORK ON INVERTED BACKGROUND EVENTS because they have no eventStartMS/eventDurationMS
 function compareSegs(seg1, seg2) {
 	return seg1.eventStartMS - seg2.eventStartMS || // earlier events go first
-		/*seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first*/
-		compareShiftEvent(seg1, seg2) || // tie? shift goes first
-		seg1.eventDurationMS - seg2.eventDurationMS || // tie? shorter events go first
+		seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first
 		seg2.event.allDay - seg1.event.allDay || // tie? put all-day events first (booleans cast to 0/1)
 		(seg1.event.title || '').localeCompare(seg2.event.title); // tie? alphabetically by title
-}
-
-// A cmp function for determining which event should be placed further on top depending on if the event
-// is a single event or a shift event.
-// BEFORE FETCHING DETAILED INFORMATION ABOUT EACH EVENT, THE PROPERTY 'SHIFT_ID' IS NOT SET! DO WE HANDLE THIS RIGHT?!
-function compareShiftEvent(seg1, seg2) {
-	if (seg1.event.hasOwnProperty("shift_id") && !seg2.event.hasOwnProperty("shift_id")) {
-		return -1;
-	} else if (!seg1.event.hasOwnProperty("shift_id") && seg2.event.hasOwnProperty("shift_id")) {
-		return 1;
-	} else if (seg1.event.hasOwnProperty("shift_id") && seg2.event.hasOwnProperty("shift_id")) {
-		if (seg1.event.shift_id > 0 && seg2.event.shift_id == 0) {
-			return -1;
-		} else if (seg1.event.shift_id == 0 && seg2.event.shift_id > 0) {
-			return 1;
-		} else {
-			return 0;
-		}
-	} else {
-		return 0;
-	}
 }
 
 fc.compareSegs = compareSegs; // export
@@ -4812,78 +4789,33 @@ DayGrid.mixin({
 	// Stacks a flat array of segments, which are all assumed to be in the same row, into subarrays of vertical levels.
 	buildSegLevels: function(segs) {
 		var levels = [];
-		var levelsByWorkingArea = {};
-		var i, j, k, workingArea, seg;
-		var workingAreas = [];
-
-		// setup temporary levels grouped by working area
-		for(i = 0; i < segs.length; i++) {
-			workingArea = segs[i].event.title;
-			if (!levelsByWorkingArea.hasOwnProperty(workingArea)) {
-				workingAreas.push(workingArea);
-				levelsByWorkingArea[workingArea] = [];
-			}
-		}
-
-		console.log("levelsByWorkingArea");
-		console.log(levelsByWorkingArea);
+		var i, seg;
+		var j;
 
 		// Give preference to elements with certain criteria, so they have
 		// a chance to be closer to the top.
-		console.log("segs before sort");
-		console.log(segs);
 		segs.sort(compareSegs);
-		console.log("segs after sort");
-		console.log(segs);
-		for(i = 0; i < segs.length; i++) {
-			console.log(segs[i].event.start + " (shift " + segs[i].event.shift_id + ")");
-		}
-
+		
 		for (i = 0; i < segs.length; i++) {
 			seg = segs[i];
-			workingArea = seg.event.title;
 
 			// loop through levels, starting with the topmost, until the segment doesn't collide with other segments
-			for (k = 0; k < levelsByWorkingArea[workingArea].length; k++) {
-				if (!isDaySegCollision(seg, levelsByWorkingArea[workingArea][k])) {
+			for (j = 0; j < levels.length; j++) {
+				if (!isDaySegCollision(seg, levels[j])) {
 					break;
 				}
 			}
-			// `k` now holds the desired subrow index
-			seg.levelByWorkingArea = k;
+			// `j` now holds the desired subrow index
+			seg.level = j;
 
 			// create new level array if needed and append segment
-			(levelsByWorkingArea[workingArea][k] || (levelsByWorkingArea[workingArea][k] = [])).push(seg);
+			(levels[j] || (levels[j] = [])).push(seg);
 		}
-
-		console.log("filled levelsByWorkingArea");
-		console.log(levelsByWorkingArea);
-
-		// concatenate levels by working area and add empty row
-		for (i = 0; i < workingAreas.length; i++) {
-			levels = levels.concat(levelsByWorkingArea[workingAreas[i]], []);
-		}
-
-		console.log("concatenated levels");
-		console.log(levels);
-
-		// assign level property to each segment
-		for (i = 0; i < levels.length; i++) {
-			for (seg in levels[i]) {
-				seg.level = i;
-			}
-		}
-
-		console.log("assigned level property to segs");
-		console.log(segs);
 
 		// order segments left-to-right. very important if calendar is RTL
 		for (j = 0; j < levels.length; j++) {
 			levels[j].sort(compareDaySegCols);
 		}
-
-		console.log("ordered segments left-to-right");
-		console.log(segs);
 
 		return levels;
 	},
@@ -8006,7 +7938,6 @@ function EventManager(options) { // assumed to be a calendar
 	t.addEventSource = addEventSource;
 	t.removeEventSource = removeEventSource;
 	t.updateEvent = updateEvent;
-	t.updateEvents = updateEvents;
 	t.renderEvent = renderEvent;
 	t.removeEvents = removeEvents;
 	t.clientEvents = clientEvents;
@@ -8306,23 +8237,6 @@ function EventManager(options) { // assumed to be a calendar
 	/* Manipulation
 	-----------------------------------------------------------------------------*/
 
-	function updateEvents(events) {
-
-		for(var i = 0; i < events.length; i++) {
-			// massage start/end values, even if date string values
-			events[i].start = t.moment(events[i].start);
-			if (events[i].end) {
-				events[i].end = t.moment(events[i].end);
-			}
-			else {
-				events[i].end = null;
-			}
-
-			mutateEvent(events[i], getMiscEventProps(events[i]));
-		}
-		reportEvents(cache); // reports event modifications (so we can redraw)
-
-	}
 
 	// Only ever called from the externally-facing API
 	function updateEvent(event) {
