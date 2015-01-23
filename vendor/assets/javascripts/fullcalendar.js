@@ -4891,7 +4891,7 @@ DayGrid.mixin({
 
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
-			levels = levels.concat(levelsByWorkingArea[workingAreas[i]], []);
+			levels = levels.concat(levelsByWorkingArea[workingAreas[i]], [{ el: renderTransparentEventEl(), leftCol: 0, rightCol: 0 }]);
 		}
 
 		console.log("concatenated levels");
@@ -4936,6 +4936,11 @@ DayGrid.mixin({
 	}
 
 });
+
+function renderTransparentEventEl() {
+	return $('<div class="fc-day-grid-event fc-event fc-start fc-end monday" style="background-color: transparent; border-color: transparent;"/>')
+		.append('<div class="text-center">&nbsp;</div>');
+}
 
 
 // Computes whether two segments' columns collide. They are assumed to be in the same row.
