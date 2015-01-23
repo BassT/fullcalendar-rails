@@ -4857,9 +4857,11 @@ DayGrid.mixin({
 
 			// if we're adding a shift and there's already a single event, skip one level
 			var level = levelsByWorkingArea[workingArea][k];
-			if (seg.event.shift_id !== null && typeof seg.event.shift_id !== "undefined") {
-				if (seg.event.shift_id !== 0 && level[0].event.shift_id === 0){
-					k++;
+			if (typeof level !== "undefined" && level !== null) {
+				if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) {
+					if (seg.event.shift_id !== 0 && level[0].event.shift_id === 0) {
+						k++;
+					}
 				}
 			}
 
