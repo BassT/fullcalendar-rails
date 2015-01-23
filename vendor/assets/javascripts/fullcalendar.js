@@ -4791,6 +4791,10 @@ DayGrid.mixin({
 						col++;
 					}
 
+					if (typeof seg.paddingBottom !== "undefined" && seg.paddingBottom !== null) {
+						td.css("padding-bottom", seg.paddingBottom);
+					}
+
 					tr.append(td);
 				}
 			}
@@ -4895,7 +4899,7 @@ DayGrid.mixin({
 			if (i < workingAreas.length - 1) {
 				var lastLevelOfWorkingArea = levelsByWorkingArea[workingArea][levelsByWorkingArea[workingArea].length - 1];
 				for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
-					lastLevelOfWorkingArea[k].el.css("padding-bottom", "45px");
+					lastLevelOfWorkingArea[k].paddingBottom = "45px";
 				}
 			}
 			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
