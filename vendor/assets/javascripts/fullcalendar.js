@@ -4893,7 +4893,7 @@ DayGrid.mixin({
 		for (i = 0; i < workingAreas.length; i++) {
 			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
 			if (i < workingAreas.length - 1) {
-				levels.push([{el: renderTransparentEventEl(), leftCol: 0, rightCol: 0}]);
+				levels.push([{el: renderTransparentEventEl(), leftCol: 0, rightCol: 0, row: 0}]);
 			}
 		}
 
@@ -4942,7 +4942,7 @@ DayGrid.mixin({
 
 function renderTransparentEventEl() {
 	return $('<div class="fc-day-grid-event fc-event fc-start fc-end monday" style="background-color: transparent; border-color: transparent;"/>')
-		.append('<div class="text-center">&nbsp;</div>');
+		.append('<div class="text-center">&nbsp;</div><div class="text-center">&nbsp;</div>');
 }
 
 
