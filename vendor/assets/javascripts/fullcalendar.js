@@ -4859,7 +4859,7 @@ DayGrid.mixin({
 								// if single event, only add if there's NO later shift which starts before this single event
 								var nextLevel = levelsByWorkingArea[workingArea][k+1];
 								if (seg.event.shift_id === 0) { // single event
-									if (!(typeof nextLevel === "undefined" && nextLevel !== null)) { // there's a later shift
+									if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
 										if (moment(nextLevel[0].event.start).after(moment(seg.event.start))) { // shift starts after the single event --> that's okay, add the single event
 											break;
 										}
