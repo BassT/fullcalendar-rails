@@ -4891,10 +4891,14 @@ DayGrid.mixin({
 
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
-			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
+			// add padding to each element of last level of each working area
 			if (i < workingAreas.length - 1) {
-				levels.push([{el: renderTransparentEventEl(), leftCol: 0, rightCol: 0, row: 0}]);
+				var lastLevelOfWorkingArea = levelsByWorkingArea[workingArea][levelsByWorkingArea[workingArea].length - 1];
+				for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
+					lastLevelOfWorkingArea[k].event.el.css("padding-bottom", "45px");
+				}
 			}
+			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
 		}
 
 		console.log("concatenated levels");
@@ -4911,12 +4915,12 @@ DayGrid.mixin({
 		console.log(segs);
 
 		// order segments left-to-right. very important if calendar is RTL
-		//for (j = 0; j < levels.length; j++) {
-		//	levels[j].sort(compareDaySegCols);
-		//}
+		for (j = 0; j < levels.length; j++) {
+			levels[j].sort(compareDaySegCols);
+		}
 
-		//console.log("ordered segments left-to-right");
-		//console.log(segs);
+		console.log("ordered segments left-to-right");
+		console.log(segs);
 
 		return levels;
 	},
@@ -4939,11 +4943,6 @@ DayGrid.mixin({
 	}
 
 });
-
-function renderTransparentEventEl() {
-	return $('<div class="fc-day-grid-event fc-event fc-start fc-end monday" style="background-color: transparent; border-color: transparent;"/>')
-		.append('<div class="text-center">&nbsp;</div><div class="text-center">&nbsp;</div>');
-}
 
 
 // Computes whether two segments' columns collide. They are assumed to be in the same row.
