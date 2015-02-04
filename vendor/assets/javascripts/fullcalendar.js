@@ -4906,7 +4906,12 @@ DayGrid.mixin({
 		}
 
 		console.log("concatenated levels");
-		console.log(levels);
+		for (i = 0; i < levels.length; i = i + 1) {
+            console.log(levels[i][0].event.title);
+            for (j = 0; j < levels[i].length; j = j+ 1) {
+                console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
+            }
+        }
 
 		// assign level property to each segment
 		for (i = 0; i < levels.length; i++) {
