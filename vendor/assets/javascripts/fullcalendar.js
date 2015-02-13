@@ -4833,21 +4833,21 @@ DayGrid.mixin({
 			}
 		}
 
-		console.log("levelsByWorkingArea");
-		console.log(levelsByWorkingArea);
+		// console.log("levelsByWorkingArea");
+		// console.log(levelsByWorkingArea);
 
 		// Give preference to elements with certain criteria, so they have
 		// a chance to be closer to the top.
-		console.log("segs before sort");
-		console.log(segs);
+		// console.log("segs before sort");
+		// console.log(segs);
 		for(i = 0; i < segs.length; i++) {
-			console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
+			// console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
 		}
 		segs.sort(compareSegs);
-		console.log("segs after sort");
-		console.log(segs);
+		// console.log("segs after sort");
+		// console.log(segs);
 		for(i = 0; i < segs.length; i++) {
-			console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
+			// console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
 		}
 
 		for (i = 0; i < segs.length; i++) {
@@ -4892,8 +4892,8 @@ DayGrid.mixin({
 			(levelsByWorkingArea[workingArea][k] || (levelsByWorkingArea[workingArea][k] = [])).push(seg);
 		}
 
-		console.log("filled levelsByWorkingArea");
-		console.log(levelsByWorkingArea);
+		// console.log("filled levelsByWorkingArea");
+		// console.log(levelsByWorkingArea);
 
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
@@ -4905,11 +4905,11 @@ DayGrid.mixin({
 			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
 		}
 
-		console.log("concatenated levels");
+		// console.log("concatenated levels");
 		for (i = 0; i < levels.length; i = i + 1) {
-            console.log(levels[i][0].event.title);
+            // console.log(levels[i][0].event.title);
             for (j = 0; j < levels[i].length; j = j+ 1) {
-                console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
+                // console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
             }
         }
 
@@ -4920,16 +4920,16 @@ DayGrid.mixin({
 			}
 		}
 
-		console.log("assigned level property to segs");
-		console.log(segs);
+		// console.log("assigned level property to segs");
+		// console.log(segs);
 
 		// order segments left-to-right. very important if calendar is RTL
 		for (j = 0; j < levels.length; j++) {
 			levels[j].sort(compareDaySegCols);
 		}
 
-		console.log("ordered segments left-to-right");
-		console.log(segs);
+		// console.log("ordered segments left-to-right");
+		// console.log(segs);
 
 		return levels;
 	},
