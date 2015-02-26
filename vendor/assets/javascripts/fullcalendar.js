@@ -4883,7 +4883,10 @@ DayGrid.mixin({
                                             console.log("shift starts after single event");
 											break;
 										}
-									}
+									} else {
+                                        console.log("there's no later shift");
+                                        break;
+                                    }
 								} else { // shift event
                                     console.log("shift event");
 									if (segEventTimeMatchesLevel(seg, level)) {
@@ -4896,6 +4899,7 @@ DayGrid.mixin({
 								}
 							}
 						}
+                        console.log("trying to add single event to shift level");
 					} else { // no shift_ids loaded yet, just dump the events old style
 						if (!isDaySegCollision(seg, level)) {
 							break;
