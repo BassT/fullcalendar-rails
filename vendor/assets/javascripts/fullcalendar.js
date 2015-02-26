@@ -4741,6 +4741,7 @@ DayGrid.mixin({
 
 		// populates empty cells from the current column (`col`) to `endCol`
 		function emptyCellsUntil(endCol) {
+            console.log("emtpyCellsUntil " + endCol);
 			while (col < endCol) {
 				// try to grab a cell from the level above and extend its rowspan. otherwise, create a fresh cell
 				td = (loneCellMatrix[i - 1] || [])[col];
@@ -4761,6 +4762,7 @@ DayGrid.mixin({
 		}
 
 		for (i = 0; i < levelCnt; i++) { // iterate through all levels
+            console.log("rendering level[" + i + "]: " + segLevels[i]);
 			levelSegs = segLevels[i];
 			col = 0;
 			tr = $('<tr/>');
@@ -4773,6 +4775,7 @@ DayGrid.mixin({
 			// this single empty row is useful for styling.
 			if (levelSegs) {
 				for (j = 0; j < levelSegs.length; j++) { // iterate through segments in level
+                    console.log("levelSegs[" + j + "]: " + moment(levelSegs[i].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[i].event.end).format("HH:mm")  + " (shift_id " + levelSegs[i].event.shift_id + ")");
 					seg = levelSegs[j];
 
 					emptyCellsUntil(seg.leftCol);
@@ -4984,6 +4987,7 @@ function segEventTimeMatchesLevel(seg, level) {
         if(level[i].event.start.hour() !== seg.event.start.hour() || level[i].event.end.hour() !== seg.event.end.hour()) {
             console.log("seg " + moment(seg.event.start).format("dd, HH:mm") + " - " + moment(seg.event.end).format("HH:mm") + " doesn't match level[" + i + "] " + moment(level[i].event.start).format("dd, HH:mm") + " - " + moment(level[i].event.end).format("HH:mm"));
             result = false;
+            break;
         }
     }
     return result;
