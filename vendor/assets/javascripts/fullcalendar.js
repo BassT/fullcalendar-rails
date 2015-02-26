@@ -4998,21 +4998,6 @@ function segEventTimeMatchesLevel(seg, level) {
     return result;
 }
 
-function levelContainsSingleEventOrMultipleShiftIds(level) {
-    for (var i = 0; i < level.length; i++) {
-        if (level[i].event.shift_id === 0) {
-            return true;
-        }
-    }
-
-    var firstShiftId = level[0].event.shift_id;
-    for (var i = 0; i < level.length; i++) {
-        if (level[i].event.shift_id !== firstShiftId) {
-            return true;
-        }
-    }
-}
-
 // Computes whether two segments' columns collide. They are assumed to be in the same row.
 function isDaySegCollision(seg, otherSegs) {
 	var i, otherSeg;
