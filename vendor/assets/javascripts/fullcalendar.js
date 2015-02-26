@@ -4860,7 +4860,7 @@ DayGrid.mixin({
 				level = levelsByWorkingArea[workingArea][k];
 				if (typeof level !== "undefined" && level !== null) { // level exists
 					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
-						if (!(seg.event.shift_id !== 0) || !(level[0].event.shift_id === 0)) { // not adding a shift or current level doesn't contain a shift
+						if ((seg.event.shift_id === 0) && !(allEventsInLevelHaveShiftId(level))) { // only continue if not trying to add single event so shift level
 							if (!isDaySegCollision(seg, level)) { // slot is still free
 								// if single event, only add if there's NO later shift which starts before this single event
 								var nextLevel = levelsByWorkingArea[workingArea][k+1];
@@ -4870,8 +4870,10 @@ DayGrid.mixin({
 											break;
 										}
 									}
-								} else {
-									break;
+								} else { // shift event
+									if (eventTimeMatchesEventsInLevel(seg, level)) {
+                                        break;
+                                    }
 								}
 							}
 						}
@@ -4934,7 +4936,6 @@ DayGrid.mixin({
 		return levels;
 	},
 
-
 	// Given a flat array of segments, return an array of sub-arrays, grouped by each segment's row
 	groupSegRows: function(segs) {
 		var segRows = [];
@@ -4953,6 +4954,25 @@ DayGrid.mixin({
 
 });
 
+function allEventsInLevelHaveShiftId(level) {
+    var result = true; // assume all events in level have shift id
+    for (var i = 0; i < level.length; i++) {
+        if (level[i].event.shift_id === 0) {
+            result = false;
+        }
+    }
+    return result;
+}
+
+function eventTimeMatchesEventsInLevel(seg, level) {
+    var result = true; // assume event time matches all events in level
+    for (var i = 0; i < level.length; i++) {
+        if(level[i].event.start !== seg.event.start || level[i].event.end !== seg.event.end) {
+            result = false;
+        }
+    }
+    return result;
+}
 
 // Computes whether two segments' columns collide. They are assumed to be in the same row.
 function isDaySegCollision(seg, otherSegs) {
