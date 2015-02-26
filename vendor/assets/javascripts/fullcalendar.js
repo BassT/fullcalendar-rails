@@ -4850,28 +4850,40 @@ DayGrid.mixin({
 			console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
 		}
 
+        console.log("assigning levels")
 		for (i = 0; i < segs.length; i++) {
+            console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
 			seg = segs[i];
 			workingArea = seg.event.title;
 
 			// loop through levels, starting with the topmost, until the segment doesn't collide with other segments
 			var level;
 			for (k = 0; k < levelsByWorkingArea[workingArea].length; k++) {
+                console.log("k = " + k);
 				level = levelsByWorkingArea[workingArea][k];
 				if (typeof level !== "undefined" && level !== null) { // level exists
+                    console.log("level exists");
 					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
-						if ((seg.event.shift_id === 0) && !(allEventsInLevelHaveShiftId(level))) { // only continue if not trying to add single event so shift level
+                        console.log("shift_id present");
+						if ((seg.event.shift_id === 0) && !(allEventsInLevelHaveShiftId(level))) { // only continue if not trying to add single event to shift level
+                            console.log("not trying to add single event to shift level");
 							if (!isDaySegCollision(seg, level)) { // slot is still free
+                                console.log("slot still free");
 								// if single event, only add if there's NO later shift which starts before this single event
 								var nextLevel = levelsByWorkingArea[workingArea][k+1];
 								if (seg.event.shift_id === 0) { // single event
+                                    console.log("single event");
 									if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
+                                        console.log("there's a later shift");
 										if (nextLevel[0].event.start.isAfter(seg.event.start)) { // shift starts after the single event --> that's okay, add the single event
+                                            console.log("shift starts after single event");
 											break;
 										}
 									}
 								} else { // shift event
-									if (eventTimeMatchesEventsInLevel(seg, level)) {
+                                    console.log("shift event");
+									if (segEventTimeMatchesLevel(seg, level)) {
+                                        console.log("segEventTimeMatchesLevel");
                                         break;
                                     }
 								}
@@ -4883,9 +4895,11 @@ DayGrid.mixin({
 						}
 					}
 				} else {
+                    console.log("level doesn't exist");
 					break;
 				}
 			}
+            console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ") k = " + k);
 
 			// `k` now holds the desired subrow index
 			seg.levelByWorkingArea = k;
@@ -4964,7 +4978,7 @@ function allEventsInLevelHaveShiftId(level) {
     return result;
 }
 
-function eventTimeMatchesEventsInLevel(seg, level) {
+function segEventTimeMatchesLevel(seg, level) {
     var result = true; // assume event time matches all events in level
     for (var i = 0; i < level.length; i++) {
         if(level[i].event.start !== seg.event.start || level[i].event.end !== seg.event.end) {
