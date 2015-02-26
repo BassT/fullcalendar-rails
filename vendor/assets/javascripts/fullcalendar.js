@@ -4875,7 +4875,7 @@ DayGrid.mixin({
                                 console.log("slot still free");
 								// if single event, only add if there's NO later shift which starts before this single event
 								var nextLevel = levelsByWorkingArea[workingArea][k+1];
-								if (seg.event.shift_id === 0 || (seg.event.shift_id !== 0 && !segEventTimeMatchesLevel(seg, level))) { // single event or shift event treated as single event
+								if (seg.event.shift_id === 0) { // single event
                                     console.log("single event");
 									if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
                                         console.log("there's a later shift");
@@ -4886,11 +4886,14 @@ DayGrid.mixin({
 									}
 								} else { // shift event
                                     console.log("shift event");
-                                    break;
-                                }
-                            }
-                        }
-                    } else { // no shift_ids loaded yet, just dump the events old style
+									if (segEventTimeMatchesLevel(seg, level)) {
+                                        console.log("segEventTimeMatchesLevel");
+                                        break;
+                                    }
+								}
+							}
+						}
+					} else { // no shift_ids loaded yet, just dump the events old style
 						if (!isDaySegCollision(seg, level)) {
 							break;
 						}
