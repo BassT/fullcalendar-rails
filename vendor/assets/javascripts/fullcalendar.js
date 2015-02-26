@@ -4869,7 +4869,7 @@ DayGrid.mixin({
                     console.log("level exists");
 					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
                         console.log("shift_id present");
-						if (!((seg.event.shift_id === 0 || seg.event.cut_out) && allEventsInLevelHaveShiftId(level))) { // only continue if not trying to add single event to shift level
+						if (!((seg.event.shift_id === 0 || seg.event.cut_out) && allEventsInLevelBelongToShift(level))) { // only continue if not trying to add single event to shift level
                             console.log("not trying to add single event to shift level");
 							if (!isDaySegCollision(seg, level)) { // slot is still free
                                 console.log("slot still free");
@@ -4975,14 +4975,15 @@ DayGrid.mixin({
 
 });
 
-function allEventsInLevelHaveShiftId(level) {
-    var result = true; // assume all events in level have shift id
+function allEventsInLevelBelongToShift(level) {
     for (var i = 0; i < level.length; i++) {
         if (level[i].event.shift_id === 0) {
-            result = false;
+            return false;
+        } else if (level[i].event.cut_out) {
+            return false;
         }
     }
-    return result;
+    return true;
 }
 
 function segEventTimeMatchesLevel(seg, level) {
