@@ -4982,6 +4982,7 @@ function segEventTimeMatchesLevel(seg, level) {
     var result = true; // assume event time matches all events in level
     for (var i = 0; i < level.length; i++) {
         if(level[i].event.start !== seg.event.start || level[i].event.end !== seg.event.end) {
+            console.log("seg " + moment(seg.event.start).format("dd, HH:mm") + " - " + moment(seg.event.end).format("HH:mm") + " doesn't match level[" + i + "] " + moment(level[i].event.start).format("dd, HH:mm") + " - " + moment(level[i].event.end).format("HH:mm"));
             result = false;
         }
     }
