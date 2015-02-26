@@ -4871,32 +4871,34 @@ DayGrid.mixin({
                         console.log("shift_id present");
 						if (!(seg.event.shift_id === 0 && allEventsInLevelHaveShiftId(level))) { // only continue if not trying to add single event to shift level
                             console.log("not trying to add single event to shift level");
-                            // if single event, only add if there's NO later shift which starts before this single event
-                            var nextLevel = levelsByWorkingArea[workingArea][k + 1];
-                            if (seg.event.shift_id === 0) { // single event
-                                console.log("single event");
-                                if (!isDaySegCollision(seg, level)) { // slot is free
-                                    console.log("slot is free");
-                                    if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
+							if (!isDaySegCollision(seg, level)) { // slot is still free
+                                console.log("slot still free");
+								// if single event, only add if there's NO later shift which starts before this single event
+								var nextLevel = levelsByWorkingArea[workingArea][k+1];
+								if (seg.event.shift_id === 0) { // single event
+                                    console.log("single event");
+									if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
                                         console.log("there's a later shift");
-                                        if (nextLevel[0].event.start.isAfter(seg.event.start)) { // shift starts after the single event --> that's okay, add the single event
+										if (nextLevel[0].event.start.isAfter(seg.event.start)) { // shift starts after the single event --> that's okay, add the single event
                                             console.log("shift starts after single event");
-                                            break;
-                                        }
-                                    } else {
+											break;
+										}
+									} else {
                                         console.log("there's no later shift");
                                         break;
                                     }
-                                }
-                            } else { // shift event
-                                console.log("shift event");
-                                if (segEventTimeMatchesLevel(seg, level)) {
-                                    console.log("segEventTimeMatchesLevel");
-                                    break;
-                                }
-                            }
-                        }
-                        console.log("trying to add single event to shift level");
+								} else { // shift event
+                                    console.log("shift event");
+									if (segEventTimeMatchesLevel(seg, level)) {
+                                        console.log("segEventTimeMatchesLevel");
+                                        break;
+                                    } else if (levelContainsSingleEventOrMultipleShiftIds(level)) {
+                                        console.log("levelContainsSingleEventOrMultipleShiftIDs");
+                                        break;
+                                    }
+								}
+							}
+						}
 					} else { // no shift_ids loaded yet, just dump the events old style
 						if (!isDaySegCollision(seg, level)) {
 							break;
