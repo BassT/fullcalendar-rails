@@ -4775,7 +4775,7 @@ DayGrid.mixin({
 			// this single empty row is useful for styling.
 			if (levelSegs) {
 				for (j = 0; j < levelSegs.length; j++) { // iterate through segments in level
-                    console.log("levelSegs[" + j + "]: " + moment(levelSegs[i].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[i].event.end).format("HH:mm")  + " (shift_id " + levelSegs[i].event.shift_id + ")");
+                    console.log("levelSegs[" + j + "]: " + moment(levelSegs[j].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[j].event.end).format("HH:mm")  + " (shift_id " + levelSegs[j].event.shift_id + ")");
 					seg = levelSegs[j];
 
 					emptyCellsUntil(seg.leftCol);
