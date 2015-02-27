@@ -4394,12 +4394,15 @@ var DayGrid = Grid.extend({
 				else {
 					seg.leftCol = segFirst;
 					seg.rightCol = segLast;
-				}
-				segs.push(seg);
-			}
-		}
+                }
 
-		return segs;
+                // we want all events to cover just one column
+                seg.rightCol == seg.leftCol;
+
+                segs.push(seg);
+            }
+        }
+        return segs;
 	},
 
 
