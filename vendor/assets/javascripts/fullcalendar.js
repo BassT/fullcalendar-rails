@@ -1,4 +1,10 @@
 /*!
+ *
+ * FullCalendar v3.0.0-alpha
+ * (c) 2015 Sebastian Richter
+ *
+ * based on:
+ *
  * FullCalendar v2.2.6
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
