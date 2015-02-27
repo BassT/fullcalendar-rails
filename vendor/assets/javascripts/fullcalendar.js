@@ -1,6 +1,6 @@
 /*!
  *
- * FullCalendar v3.0.0-alpha
+ * FullCalendar v3.0.1-alpha
  * (c) 2015 Sebastian Richter
  *
  * based on:
