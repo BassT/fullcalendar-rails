@@ -4397,7 +4397,7 @@ var DayGrid = Grid.extend({
                 }
 
                 // we want all events to cover just one column
-                seg.rightCol == seg.leftCol;
+                seg.rightCol = seg.leftCol;
 
                 segs.push(seg);
             }
