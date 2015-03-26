@@ -4966,8 +4966,8 @@ DayGrid.mixin({
 			(levelsByWorkingArea[workingArea][k] || (levelsByWorkingArea[workingArea][k] = [])).push(seg);
 		}
 
-		// console.log("filled levelsByWorkingArea");
-		// console.log(levelsByWorkingArea);
+		console.log("filled levelsByWorkingArea");
+		console.log(levelsByWorkingArea);
 
 		// concatenate levels by working area and add empty row
 		for (i = 0; i < workingAreas.length; i++) {
@@ -4983,7 +4983,7 @@ DayGrid.mixin({
 
 		console.log("concatenated levels");
 		for (i = 0; i < levels.length; i = i + 1) {
-            // console.log(levels[i][0].event.title);
+            console.log(levels[i][0].event.title);
             for (j = 0; j < levels[i].length; j = j+ 1) {
                 console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
             }
