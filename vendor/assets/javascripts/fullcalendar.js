@@ -4735,7 +4735,12 @@ DayGrid.mixin({
 	// the segments. Returns object with a bunch of internal data about how the render was calculated.
 	renderSegRow: function(row, rowSegs) {
 		var colCnt = this.colCnt;
-		var segLevels = this.buildSegLevels(rowSegs); // group into sub-arrays of levels
+		var segLevels; // group into sub-arrays of levels
+        if (getCookie('areaSort') !== 'false') {
+            segLevels = this.buildSegLevelsWithWorkingArea(rowSegs);
+        } else {
+            segLevels = this.buildSegLevels(rowSegs);
+        }
 		var levelCnt = Math.max(1, segLevels.length); // ensure at least one level
 		var tbody = $('<tbody/>');
 		var segMatrix = []; // lookup for which segments are rendered into which level+col cells
@@ -4753,8 +4758,11 @@ DayGrid.mixin({
             // console.log("emtpyCellsUntil " + endCol);
 			while (col < endCol) {
 				// try to grab a cell from the level above and extend its rowspan. otherwise, create a fresh cell
-				// td = (loneCellMatrix[i - 1] || [])[col];
-                td = [][col];
+				if (getCookie('areaSort') !== 'false') {
+                    td = (loneCellMatrix[i - 1] || [])[col];
+                } else {
+                    td = [][col];
+                }
 				if (td) {
 					td.attr(
 						'rowspan',
@@ -4829,9 +4837,43 @@ DayGrid.mixin({
 		};
 	},
 
+    // Stacks a flat array of segments, which are all assumed to be in the same row, into subarrays of vertical levels.
+    buildSegLevels: function(segs) {
+        var levels = [];
+        var i, seg;
+        var j;
+
+        // Give preference to elements with certain criteria, so they have
+        // a chance to be closer to the top.
+        segs.sort(compareSegs);
+
+        for (i = 0; i < segs.length; i++) {
+            seg = segs[i];
+
+            // loop through levels, starting with the topmost, until the segment doesn't collide with other segments
+            for (j = 0; j < levels.length; j++) {
+                if (!isDaySegCollision(seg, levels[j])) {
+                    break;
+                }
+            }
+            // `j` now holds the desired subrow index
+            seg.level = j;
+
+            // create new level array if needed and append segment
+            (levels[j] || (levels[j] = [])).push(seg);
+        }
+
+        // order segments left-to-right. very important if calendar is RTL
+        for (j = 0; j < levels.length; j++) {
+            levels[j].sort(compareDaySegCols);
+        }
+
+        return levels;
+    },
 
 	// Stacks a flat array of segments, which are all assumed to be in the same row, into subarrays of vertical levels.
-	buildSegLevels: function(segs) {
+    // added customized papershift sorting
+	buildSegLevelsWithWorkingArea: function(segs) {
 		var levels = [];
 		var levelsByWorkingArea = {};
 		var i, j, k, workingArea, seg;
