@@ -4757,8 +4757,8 @@ DayGrid.mixin({
             // console.log("emtpyCellsUntil " + endCol);
 			while (col < endCol) {
 				// try to grab a cell from the level above and extend its rowspan. otherwise, create a fresh cell
-				td = (loneCellMatrix[i - 1] || [])[col];
-                // td = [][col];
+				// td = (loneCellMatrix[i - 1] || [])[col];
+                td = [][col];
 				if (td) {
 					td.attr(
 						'rowspan',
