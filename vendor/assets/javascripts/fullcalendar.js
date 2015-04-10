@@ -4937,22 +4937,20 @@ DayGrid.mixin({
 		// console.log(levelsByWorkingArea);
 
 		// concatenate levels by working area and add empty row
-		for (i = 0; i < workingAreas.length; i++) {
-			// add padding to each element of last level of each working area - if desired
-            if (getCookie('areaSort') !== "false") {
-                var lastLevelOfWorkingArea = levelsByWorkingArea[workingAreas[i]][levelsByWorkingArea[workingAreas[i]].length - 1];
-                for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
-                    lastLevelOfWorkingArea[k].paddingBottom = "45px";
-                }
-            }
-			var sortedWorkingAreaTitles = Object.keys(levelsByWorkingArea).sort();
-			console.log('levels before concat');
-			console.log(levels);
-			for (j = 0; j < sortedWorkingAreaTitles.length; j++) {
-				levels = levels.concat(levelsByWorkingArea[sortedWorkingAreaTitles[j]]);
-				console.log('levels after concat ' + j + ' of ' + sortedWorkingAreaTitles.length);
-				console.log(levels);
+		// add padding to each element of last level of each working area - if desired
+		if (getCookie('areaSort') !== "false") {
+			var lastLevelOfWorkingArea = levelsByWorkingArea[workingAreas[i]][levelsByWorkingArea[workingAreas[i]].length - 1];
+			for (k = 0; k < lastLevelOfWorkingArea.length; k++) {
+				lastLevelOfWorkingArea[k].paddingBottom = "45px";
 			}
+		}
+		var sortedWorkingAreaTitles = Object.keys(levelsByWorkingArea).sort();
+		console.log('levels before concat');
+		console.log(levels);
+		for (j = 0; j < sortedWorkingAreaTitles.length; j++) {
+			levels = levels.concat(levelsByWorkingArea[sortedWorkingAreaTitles[j]]);
+			console.log('levels after concat ' + j + ' of ' + sortedWorkingAreaTitles.length);
+			console.log(levels);
 		}
 
 		console.log("concatenated levels");
