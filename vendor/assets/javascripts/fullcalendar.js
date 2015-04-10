@@ -4776,7 +4776,7 @@ DayGrid.mixin({
 		}
 
 		for (i = 0; i < levelCnt; i++) { // iterate through all levels
-            // console.log("rendering level[" + i + "]: " + segLevels[i]);
+            console.log("rendering level[" + i + "]: " + segLevels[i]);
 			levelSegs = segLevels[i];
 			col = 0;
 			tr = $('<tr/>');
@@ -4789,7 +4789,7 @@ DayGrid.mixin({
 			// this single empty row is useful for styling.
 			if (levelSegs) {
 				for (j = 0; j < levelSegs.length; j++) { // iterate through segments in level
-                    // console.log("levelSegs[" + j + "]: " + moment(levelSegs[j].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[j].event.end).format("HH:mm")  + " (shift_id " + levelSegs[j].event.shift_id + ")");
+                    console.log("levelSegs[" + j + "]: " + moment(levelSegs[j].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[j].event.end).format("HH:mm")  + " (shift_id " + levelSegs[j].event.shift_id + ")");
 					seg = levelSegs[j];
 
 					emptyCellsUntil(seg.leftCol);
@@ -4946,8 +4946,12 @@ DayGrid.mixin({
                 }
             }
 			var sortedWorkingAreaTitles = Object.keys(levelsByWorkingArea).sort();
+			console.log('levels before concat');
+			console.log(levels);
 			for (j = 0; j < sortedWorkingAreaTitles.length; j++) {
 				levels = levels.concat(levelsByWorkingArea[sortedWorkingAreaTitles[j]]);
+				console.log('levels after concat ' + j + ' of ' + sortedWorkingAreaTitles.length);
+				console.log(levels);
 			}
 		}
 
