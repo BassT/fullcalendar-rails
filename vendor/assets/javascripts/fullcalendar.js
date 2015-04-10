@@ -4776,7 +4776,7 @@ DayGrid.mixin({
 		}
 
 		for (i = 0; i < levelCnt; i++) { // iterate through all levels
-            console.log("rendering level[" + i + "]: " + segLevels[i]);
+			// console.log("rendering level[" + i + "]: " + segLevels[i]);
 			levelSegs = segLevels[i];
 			col = 0;
 			tr = $('<tr/>');
@@ -4789,7 +4789,7 @@ DayGrid.mixin({
 			// this single empty row is useful for styling.
 			if (levelSegs) {
 				for (j = 0; j < levelSegs.length; j++) { // iterate through segments in level
-                    console.log("levelSegs[" + j + "]: " + moment(levelSegs[j].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[j].event.end).format("HH:mm")  + " (shift_id " + levelSegs[j].event.shift_id + ")");
+					// console.log("levelSegs[" + j + "]: " + moment(levelSegs[j].event.start).format("dd, HH:mm") + " - " + moment(levelSegs[j].event.end).format("HH:mm")  + " (shift_id " + levelSegs[j].event.shift_id + ")");
 					seg = levelSegs[j];
 
 					emptyCellsUntil(seg.leftCol);
@@ -4948,19 +4948,19 @@ DayGrid.mixin({
 
 		// concatenate levels by working area and add empty row
 		var sortedWorkingAreaTitles = Object.keys(levelsByWorkingArea).sort();
-		console.log('levels before concat');
-		console.log(levels);
+		// console.log('levels before concat');
+		// console.log(levels);
 		for (j = 0; j < sortedWorkingAreaTitles.length; j++) {
 			levels = levels.concat(levelsByWorkingArea[sortedWorkingAreaTitles[j]]);
-			console.log('levels after concat ' + j + ' of ' + sortedWorkingAreaTitles.length);
-			console.log(levels);
+			// console.log('levels after concat ' + j + ' of ' + sortedWorkingAreaTitles.length);
+			// console.log(levels);
 		}
 
-		console.log("concatenated levels");
+		// console.log("concatenated levels");
 		for (i = 0; i < levels.length; i = i + 1) {
-        	console.log(levels[i][0].event.title);
+			// console.log(levels[i][0].event.title);
             for (j = 0; j < levels[i].length; j = j+ 1) {
-                console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
+				// console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
             }
         }
 
