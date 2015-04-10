@@ -4036,7 +4036,7 @@ function compareNormalRanges(range1, range2) {
 function compareSegs(seg1, seg2) {
 	return moment(seg1.event.start).hour() - moment(seg2.event.start).hour() || // earlier events go first - only HOUR
 		/*seg2.eventDurationMS - seg1.eventDurationMS || // tie? longer events go first*/
-		compareShiftEvent(seg1, seg2) || // tie? shift goes first
+		/*compareShiftEvent(seg1, seg2) || // tie? shift goes first*/
 		seg1.event.start - seg2.event.start || // tie? earlier events go first (weekday)
 		seg1.eventDurationMS - seg2.eventDurationMS || // tie? shorter events go first
 		seg2.event.allDay - seg1.event.allDay || // tie? put all-day events first (booleans cast to 0/1)
@@ -4751,14 +4751,14 @@ DayGrid.mixin({
 		var tr;
 		var j, seg;
 		var td;
-		var maxHeight = 0;
 
 		// populates empty cells from the current column (`col`) to `endCol`
 		function emptyCellsUntil(endCol) {
             // console.log("emtpyCellsUntil " + endCol);
 			while (col < endCol) {
 				// try to grab a cell from the level above and extend its rowspan. otherwise, create a fresh cell
-                td = [][col];
+				td = (loneCellMatrix[i - 1] || [])[col];
+                // td = [][col];
 				if (td) {
 					td.attr(
 						'rowspan',
@@ -4796,7 +4796,6 @@ DayGrid.mixin({
 
 					// create a container that occupies or more columns. append the event element.
 					td = $('<td class="fc-event-container"/>').append(seg.el);
-
 					if (seg.leftCol != seg.rightCol) {
 						td.attr('colspan', seg.rightCol - seg.leftCol + 1);
 					}
@@ -4867,6 +4866,8 @@ DayGrid.mixin({
         return levels;
     },
 
+
+
 	// Stacks a flat array of segments, which are all assumed to be in the same row, into subarrays of vertical levels.
     // added customized papershift sorting
 	buildSegLevelsWithWorkingArea: function(segs) {
@@ -4891,15 +4892,15 @@ DayGrid.mixin({
 		// a chance to be closer to the top.
 		// console.log("segs before sort");
 		// console.log(segs);
-		for(i = 0; i < segs.length; i++) {
+		// for(i = 0; i < segs.length; i++) {
 			// console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
-		}
+		// }
 		segs.sort(compareSegs);
 		// console.log("segs after sort");
 		// console.log(segs);
-		for(i = 0; i < segs.length; i++) {
+		// for(i = 0; i < segs.length; i++) {
 			// console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
-		}
+		// }
 
         // console.log("assigning levels")
 		for (i = 0; i < segs.length; i++) {
@@ -4914,46 +4915,16 @@ DayGrid.mixin({
 				level = levelsByWorkingArea[workingArea][k];
 				if (typeof level !== "undefined" && level !== null) { // level exists
                     // console.log("level exists");
-					if (typeof seg.event.shift_id !== "undefined" && seg.event.shift_id !== null) { // shift_id present
-                        // console.log("shift_id present");
-						if (!((seg.event.shift_id === 0 || seg.event.cut_out) && allEventsInLevelBelongToShift(level))) { // only continue if not trying to add single event to shift level
-                            // console.log("not trying to add single event to shift level");
-							if (!isDaySegCollision(seg, level)) { // slot is still free
-                                // console.log("slot still free");
-								// if single event, only add if there's NO later shift which starts before this single event
-								var nextLevel = levelsByWorkingArea[workingArea][k+1];
-								if (seg.event.shift_id === 0 || seg.event.cut_out) { // (treat as) single event
-                                    // console.log("(treat as) single event");
-									if (typeof nextLevel !== "undefined" && nextLevel !== null) { // there's a later shift
-                                        // console.log("there's a later shift");
-										if (nextLevel[0].event.start.isAfter(seg.event.start)) { // shift starts after the single event --> that's okay, add the single event
-                                            // console.log("shift starts after single event");
-											break;
-										}
-									} else {
-                                        // console.log("there's no later shift");
-                                        break;
-                                    }
-								} else { // shift event
-                                    // console.log("shift event");
-									if (segEventTimeMatchesLevel(seg, level)) {
-                                        // console.log("segEventTimeMatchesLevel");
-                                        break;
-                                    }
-								}
-							}
-						}
-					} else { // no shift_ids loaded yet, just dump the events old style
-						if (!isDaySegCollision(seg, level)) {
-							break;
-						}
+					if (!isDaySegCollision(seg, level)) { // slot is still free
+						// console.log('slot is still free');
+						break;
 					}
 				} else {
-                    // console.log("level doesn't exist");
+					// console.log("level doesn't exist");
 					break;
 				}
 			}
-            // console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ") k = " + k);
+			// console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ") k = " + k);
 
 			// `k` now holds the desired subrow index
 			seg.levelByWorkingArea = k;
@@ -4974,14 +4945,17 @@ DayGrid.mixin({
                     lastLevelOfWorkingArea[k].paddingBottom = "45px";
                 }
             }
-			levels = levels.concat(levelsByWorkingArea[workingAreas[i]]);
+			var sortedWorkingAreaTitles = Object.keys(levelsByWorkingArea).sort();
+			for (j = 0; j < sortedWorkingAreaTitles.length; j++) {
+				levels = levels.concat(levelsByWorkingArea[sortedWorkingAreaTitles[j]]);
+			}
 		}
 
-		// console.log("concatenated levels");
+		console.log("concatenated levels");
 		for (i = 0; i < levels.length; i = i + 1) {
-            // console.log(levels[i][0].event.title);
+        	console.log(levels[i][0].event.title);
             for (j = 0; j < levels[i].length; j = j+ 1) {
-                // console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
+                console.log(moment(levels[i][j].event.start).format("dd, HH:mm") + " - " + moment(levels[i][j].event.end).format("HH:mm")  + " (shift_id " + levels[i][j].event.shift_id + ")");
             }
         }
 
