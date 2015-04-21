@@ -4878,7 +4878,7 @@ DayGrid.mixin({
 
 		// setup temporary levels grouped by working area
 		for(i = 0; i < segs.length; i++) {
-			workingArea = segs[i].event.title;
+			workingArea = segs[i].event.title.toLowerCase();
 			if (!levelsByWorkingArea.hasOwnProperty(workingArea)) {
 				workingAreas.push(workingArea);
 				levelsByWorkingArea[workingArea] = [];
@@ -4906,7 +4906,7 @@ DayGrid.mixin({
 		for (i = 0; i < segs.length; i++) {
             // console.log(moment(segs[i].event.start).format("dd, HH:mm") + " - " + moment(segs[i].event.end).format("HH:mm")  + " (shift_id " + segs[i].event.shift_id + ")");
 			seg = segs[i];
-			workingArea = seg.event.title;
+			workingArea = seg.event.title.toLowerCase();
 
 			// loop through levels, starting with the topmost, until the segment doesn't collide with other segments
 			var level;
